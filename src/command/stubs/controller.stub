@@ -1,0 +1,66 @@
+<?php
+
+declare(strict_types=1);
+
+namespace app\backend\controller;
+
+use app\backend\service\{%modelName%} as {%modelName%}Service;
+
+class {%modelName%} extends Common
+{
+    protected ${%instanceName%};
+
+    public function initialize()
+    {
+        $this->{%instanceName%} = new {%modelName%}Service();
+        parent::initialize();
+    }
+
+    public function home()
+    {
+        $result = $this->{%instanceName%}->paginatedListAPI($this->request->only($this->{%instanceName%}->allowHome));
+
+        return $result;
+    }
+
+    public function add()
+    {
+        $result = $this->{%instanceName%}->addAPI();
+
+        return $result;
+    }
+
+    public function save()
+    {
+        $result = $this->{%instanceName%}->saveAPI($this->request->only($this->{%instanceName%}->allowSave));
+
+        return $result;
+    }
+
+    public function read($id)
+    {
+        return $this->{%instanceName%}->readAPI($id);
+    }
+
+    public function update($id)
+    {
+        $result = $this->{%instanceName%}->updateAPI($id, $this->request->only($this->{%instanceName%}->allowUpdate));
+
+        return $result;
+    }
+
+    public function delete($id)
+    {
+        $result = $this->{%instanceName%}->deleteAPI($id);
+
+        return $result;
+    }
+
+    public function batchDelete()
+    {
+        $result = $this->{%instanceName%}->batchDeleteAPI($this->request->param('idArray'));
+        
+        return $result;
+    }
+
+}
