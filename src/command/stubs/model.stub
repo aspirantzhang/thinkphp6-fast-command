@@ -115,5 +115,4 @@ class {%modelName%} extends Common
     // Mutator
 
     // Searcher
-    
 }
