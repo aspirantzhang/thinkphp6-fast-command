@@ -24,6 +24,11 @@ class {%modelName%} extends Common
     public $allowUpdate = ['create_time'];
     public $allowSearch = ['id', 'create_time'];
 
+    protected function getAddonData()
+    {
+        return [];
+    }
+
     // Relation
     
     /**
