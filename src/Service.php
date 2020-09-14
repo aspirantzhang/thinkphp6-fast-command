@@ -12,6 +12,7 @@ class Service extends BaseService
     {
         $this->commands([
             'make:fastModel' => command\Model::class,
+            'make:removeModel' => command\Remove::class,
         ]);
     }
 }
