@@ -8,10 +8,14 @@ use aspirantzhang\TPAntdBuilder\Builder;
 
 class {%modelName%} extends Common
 {
+    /**
+     * Fields Configuration
+     * @example protected $readonly
+     * @example protected $unique
+     * @example public allow- ( Home | List | Sort | Read | Save | Update | Search )
+     */
     protected $readonly = ['id'];
     protected $unique = [];
-
-    // Whitelist Fields Home/List/Sort/Read/Save/Update/Search etc...
     public $allowHome = ['sort', 'order', 'page', 'per_page', 'id', 'create_time'];
     public $allowList = ['id', 'create_time'];
     public $allowSort = ['sort', 'order', 'id', 'create_time'];
@@ -22,6 +26,12 @@ class {%modelName%} extends Common
 
     // Relation
     
+    /**
+     * Page Builder
+     * @example public function buildAdd
+     * @example public function buildEdit
+     * @example public function buildList
+     */
     public function buildAdd($addonData = [])
     {
         $pageLayout = [
@@ -40,7 +50,6 @@ class {%modelName%} extends Common
             ->toArray();
     }
 
-    
     public function buildEdit($id, $addonData = [])
     {
         $pageLayout = [
@@ -101,4 +110,5 @@ class {%modelName%} extends Common
     // Mutator
 
     // Searcher
+    
 }
