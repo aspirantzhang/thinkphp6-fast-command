@@ -1,0 +1,104 @@
+<?php
+
+declare(strict_types=1);
+
+namespace app\backend\model;
+
+use aspirantzhang\TPAntdBuilder\Builder;
+
+class {%modelName%} extends Common
+{
+    protected $readonly = ['id'];
+    protected $unique = [];
+
+    // Whitelist Fields Home/List/Sort/Read/Save/Update/Search etc...
+    public $allowHome = ['sort', 'order', 'page', 'per_page', 'id', 'create_time'];
+    public $allowList = ['id', 'create_time'];
+    public $allowSort = ['sort', 'order', 'id', 'create_time'];
+    public $allowRead = ['id', 'create_time', 'update_time'];
+    public $allowSave = ['create_time'];
+    public $allowUpdate = ['create_time'];
+    public $allowSearch = ['id', 'create_time'];
+
+    // Relation
+    
+    public function buildAdd($addonData = [])
+    {
+        $pageLayout = [
+            Builder::actions([
+                Builder::button('Reset')->type('dashed')->action('reset'),
+                Builder::button('Cancel')->type('default')->action('cancel'),
+                Builder::button('Submit')->type('primary')->action('submit')
+                        ->uri('/backend/{%instanceName%}s')
+                        ->method('post'),
+            ]),
+        ];
+
+        return Builder::page('Add New {%modelName%}')
+            ->type('page')
+            ->layout($pageLayout)
+            ->toArray();
+    }
+
+    
+    public function buildEdit($id, $addonData = [])
+    {
+        $pageLayout = [
+            Builder::field('create_time', 'Create Time')->type('datetime'),
+            Builder::field('update_time', 'Update Time')->type('datetime'),
+            Builder::actions([
+                Builder::button('Reset')->type('dashed')->action('reset'),
+                Builder::button('Cancel')->type('default')->action('cancel'),
+                Builder::button('Submit')->type('primary')->action('submit')
+                        ->uri('/backend/{%instanceName%}s/' . $id)
+                        ->method('put'),
+            ]),
+        ];
+
+        return Builder::page('{%modelName%} Edit')
+            ->type('page')
+            ->layout($pageLayout)
+            ->toArray();
+    }
+
+    public function buildList($addonData = [])
+    {
+        $tableToolBar = [
+            Builder::button('Add')->type('primary')->action('modal')->uri('/backend/{%instanceName%}s/add'),
+            Builder::button('Full page add')->type('default')->action('page')->uri('/backend/{%instanceName%}s/add'),
+            Builder::button('Reload')->type('default')->action('reload'),
+        ];
+        $batchToolBar = [
+            Builder::button('Delete')->type('danger')->action('batchDelete')
+                    ->uri('/backend/{%instanceName%}s/batch-delete')
+                    ->method('delete'),
+            Builder::button('Disable')->type('default')->action('batchDisable'),
+        ];
+        $tableColumn = [
+            Builder::field('create_time', 'Create Time')->type('datetime')->sorter(true),
+            Builder::actions([
+                Builder::button('Edit')->type('primary')->action('modal')
+                        ->uri('/backend/{%instanceName%}s'),
+                Builder::button('Full page edit')->type('default')->action('page')
+                        ->uri('/backend/{%instanceName%}s'),
+                Builder::button('Delete')->type('default')->action('delete')
+                        ->uri('/backend/{%instanceName%}s')
+                        ->method('delete'),
+            ])->title('Action'),
+        ];
+
+        return Builder::page('{%modelName%} List')
+            ->type('basicList')
+            ->searchBar(true)
+            ->tableColumn($tableColumn)
+            ->tableToolBar($tableToolBar)
+            ->batchToolBar($batchToolBar)
+            ->toArray();
+    }
+    
+    // Accessor
+
+    // Mutator
+
+    // Searcher
+}

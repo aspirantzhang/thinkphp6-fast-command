@@ -1,0 +1,17 @@
+<?php
+
+declare(strict_types=1);
+
+namespace app\backend\logic;
+
+use app\backend\model\{%modelName%} as {%modelName%}Model;
+
+class {%modelName%} extends {%modelName%}Model
+{
+    protected $unique = [];
+
+    protected function getAddonData()
+    {
+        return [];
+    }
+}

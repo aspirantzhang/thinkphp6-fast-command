@@ -16,7 +16,7 @@ class Model extends Command
     protected function configure()
     {
         $this->setName('make:fastModel')
-            ->addArgument('model', Argument::OPTIONAL, "")
+            ->addArgument('model', Argument::OPTIONAL, "Model Name")
             ->setDescription('Model Name');
     }
 
@@ -26,21 +26,25 @@ class Model extends Command
         $this->appPath = $this->app->getBasePath();
 
         $this->buildModel($modelName);
-        $output->writeln("<info>Successed</info>");
+        $output->writeln("<info>...Done.</info>");
     }
 
     protected function buildModel(string $modelName): void
     {
-        $modelName = ucwords($modelName);
-        $instanceName = strtolower($modelName);
-        $filename = $this->appPath . DIRECTORY_SEPARATOR . 'backend' . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR . $modelName . '.php';
+        $modelName = parse_name($modelName, 1);
+        $instanceName = parse_name($modelName);
 
-        if (!is_file($filename)) {
-            $content = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'controller.stub');
-            $content = str_replace(['{%modelName%}', '{%instanceName%}'], [$modelName, $instanceName], $content);
-            $this->checkDirBuild(dirname($filename));
+        $type = ['controller', 'model', 'logic', 'service', 'route', 'validate'];
 
-            file_put_contents($filename, $content);
+        foreach ($type as $type) {
+            $filename = $this->appPath . DIRECTORY_SEPARATOR . 'backend' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . $modelName . '.php';
+
+            if (!is_file($filename)) {
+                $content = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . $type . '.stub');
+                $content = str_replace(['{%modelName%}', '{%instanceName%}'], [$modelName, $instanceName], $content);
+                $this->checkDirBuild(dirname($filename));
+                file_put_contents($filename, $content);
+            }
         }
     }
 

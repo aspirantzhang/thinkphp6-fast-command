@@ -62,5 +62,4 @@ class {%modelName%} extends Common
         
         return $result;
     }
-
 }
