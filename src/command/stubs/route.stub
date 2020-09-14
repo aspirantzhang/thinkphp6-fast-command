@@ -2,7 +2,7 @@
 
 use think\facade\Route;
 
-Route::group('{%instanceName%}s', function () {
+Route::group('{%routeName%}', function () {
     Route::get('', 'home');
     Route::get('add', 'add');
     Route::get(':id', 'read');
@@ -11,4 +11,4 @@ Route::group('{%instanceName%}s', function () {
     Route::post('', 'save');
     Route::delete('batch-delete', 'batchDelete');
     Route::delete(':id', 'delete');
-})->prefix('{%instanceName%}/')->middleware(app\middleware\RouterValidate::class, '{%modelName%}');
+})->prefix('{%tableName%}/')->middleware(app\middleware\RouterValidate::class, '{%modelName%}');

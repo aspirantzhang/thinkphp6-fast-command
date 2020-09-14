@@ -7,6 +7,7 @@ namespace aspirantzhang\thinkphp6FastCommand\command;
 use think\console\Command;
 use think\console\Input;
 use think\console\input\Argument;
+use think\console\input\Option;
 use think\console\Output;
 
 class Model extends Command
@@ -15,24 +16,37 @@ class Model extends Command
 
     protected function configure()
     {
-        $this->setName('make:fastModel')
-            ->addArgument('model', Argument::OPTIONAL, "Model Name")
-            ->setDescription('Model Name');
+        $this->setName('make:buildModel')
+            ->addArgument('model', Argument::REQUIRED, "Model Name")
+            ->addOption('route', null, Option::VALUE_OPTIONAL, 'Route name')
+            ->setDescription('Fast generate model files.');
     }
 
     protected function execute(Input $input, Output $output)
     {
-        $modelName = $input->getArgument('model') ?: '';
+        
         $this->appPath = $this->app->getBasePath();
 
-        $this->buildModel($modelName);
+        $modelName = trim($input->getArgument('model')) ?: '';
+        $modelName = parse_name($modelName, 1);
+        
+        $instanceName = parse_name($modelName, 1, false);
+
+        $tableName = parse_name($modelName);
+
+        if ($input->hasOption('route')) {
+            $routeName = trim($input->getOption('route'));
+        } else {
+            $routeName = $tableName . 's';
+        }
+
+        $this->buildModel($modelName, $instanceName, $tableName, $routeName);
+
         $output->writeln("<info>...Done.</info>");
     }
 
-    protected function buildModel(string $modelName): void
+    protected function buildModel($modelName, $instanceName, $tableName, $routeName): void
     {
-        $modelName = parse_name($modelName, 1);
-        $instanceName = parse_name($modelName);
 
         $type = ['controller', 'model', 'logic', 'service', 'route', 'validate'];
 
@@ -41,7 +55,7 @@ class Model extends Command
 
             if (!is_file($filename)) {
                 $content = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . $type . '.stub');
-                $content = str_replace(['{%modelName%}', '{%instanceName%}'], [$modelName, $instanceName], $content);
+                $content = str_replace(['{%modelName%}', '{%instanceName%}', '{%tableName%}', '{%routeName%}'], [$modelName, $instanceName, $tableName, $routeName], $content);
                 $this->checkDirBuild(dirname($filename));
                 file_put_contents($filename, $content);
             }
