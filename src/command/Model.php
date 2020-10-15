@@ -39,10 +39,11 @@ class Model extends Command
         } else {
             $routeName = $tableName . 's';
         }
+        $output->writeln('<info>Writing [' . $modelName . ']...</info>');
 
         $this->buildModel($modelName, $instanceName, $tableName, $routeName);
 
-        $output->writeln("<info>...Done.</info>");
+        $output->writeln('<info>...Done.</info>');
     }
 
     protected function buildModel($modelName, $instanceName, $tableName, $routeName): void

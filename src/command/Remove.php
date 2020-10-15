@@ -25,6 +25,7 @@ class Remove extends Command
         $modelName = $input->getArgument('model') ?: '';
         $this->appPath = $this->app->getBasePath();
 
+        $output->writeln('<info>Removing [' . $modelName . ']....</info>');
         $this->removeModel($modelName);
         $output->writeln("<info>...Done.</info>");
     }

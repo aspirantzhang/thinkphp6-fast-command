@@ -7,8 +7,7 @@ Route::group('{%routeName%}', function () {
     Route::get('add', 'add');
     Route::get(':id', 'read');
     Route::put(':id', 'update');
-    Route::patch(':id', 'update');
     Route::post('', 'save');
-    Route::delete('batch-delete', 'batchDelete');
-    Route::delete(':id', 'delete');
+    Route::delete('', 'delete');
+    Route::post('restore', 'restore');
 })->prefix('{%tableName%}/')->middleware(app\middleware\RouterValidate::class, '{%modelName%}');

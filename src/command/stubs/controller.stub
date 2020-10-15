@@ -20,46 +20,48 @@ class {%modelName%} extends Common
     {
         $result = $this->{%instanceName%}->paginatedListAPI($this->request->only($this->{%instanceName%}->allowHome));
 
-        return $result;
+        return $this->json(...$result);
     }
 
     public function add()
     {
         $result = $this->{%instanceName%}->addAPI();
 
-        return $result;
+        return $this->json(...$result);
     }
 
     public function save()
     {
         $result = $this->{%instanceName%}->saveAPI($this->request->only($this->{%instanceName%}->allowSave));
 
-        return $result;
+        return $this->json(...$result);
     }
 
     public function read($id)
     {
-        return $this->{%instanceName%}->readAPI($id);
+        $result = $this->{%instanceName%}->readAPI($id);
+
+        return $this->json(...$result);
     }
 
     public function update($id)
     {
         $result = $this->{%instanceName%}->updateAPI($id, $this->request->only($this->{%instanceName%}->allowUpdate));
 
-        return $result;
+        return $this->json(...$result);
     }
 
     public function delete($id)
     {
-        $result = $this->{%instanceName%}->deleteAPI($id);
+        $result = $this->{%instanceName%}->deleteAPI($this->request->param('ids'), $this->request->param('type'));
 
-        return $result;
+        return $this->json(...$result);
     }
-
-    public function batchDelete()
+    
+    public function restore()
     {
-        $result = $this->{%instanceName%}->batchDeleteAPI($this->request->param('idArray'));
+        $result = $this->{%instanceName%}->restoreAPI($this->request->param('ids'));
         
-        return $result;
+        return $this->json(...$result);
     }
 }

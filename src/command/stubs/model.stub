@@ -16,13 +16,20 @@ class {%modelName%} extends Common
      */
     protected $readonly = ['id'];
     protected $unique = [];
-    public $allowHome = ['sort', 'order', 'page', 'per_page', 'id', 'create_time'];
-    public $allowList = ['id', 'create_time'];
+    public $allowHome = ['sort', 'order', 'page', 'per_page', 'id', 'create_time', 'status'];
+    public $allowList = ['id', 'create_time', 'status'];
     public $allowSort = ['sort', 'order', 'id', 'create_time'];
-    public $allowRead = ['id', 'create_time', 'update_time'];
-    public $allowSave = ['create_time'];
-    public $allowUpdate = ['create_time'];
-    public $allowSearch = ['id', 'create_time'];
+    public $allowRead = ['id', 'create_time', 'status', 'update_time'];
+    public $allowSave = ['create_time', 'status'];
+    public $allowUpdate = ['create_time', 'status'];
+    public $allowSearch = ['id', 'create_time', 'status'];
+
+    protected function getAddonData($params = [])
+    {
+        return [
+            'status' => getSingleChoiceValue(),
+        ];
+    }
 
     // Relation
     
@@ -34,43 +41,49 @@ class {%modelName%} extends Common
      */
     public function buildAdd($addonData = [])
     {
-        $pageLayout = [
-            Builder::actions([
-                Builder::button('Reset')->type('dashed')->action('reset'),
-                Builder::button('Cancel')->type('default')->action('cancel'),
-                Builder::button('Submit')->type('primary')->action('submit')
-                        ->uri('/backend/{%routeName%}')
-                        ->method('post'),
-            ]),
+        $main = [
+            Builder::field('create_time', 'Create Time')->type('datetime'),
+            Builder::field('update_time', 'Update Time')->type('datetime'),
+            Builder::field('status', 'Status')->type('tag')->data($addonData['status']),
+        ];
+        $action = [
+            Builder::button('Reset')->type('dashed')->action('reset'),
+            Builder::button('Cancel')->type('default')->action('cancel'),
+            Builder::button('Submit')->type('primary')->action('submit')
+                    ->uri('/backend/{%routeName%}')
+                    ->method('post'),
         ];
 
-        return Builder::page('Add New {%modelName%}')
-            ->type('page')
-            ->layout($pageLayout)
-            ->toArray();
+        return Builder::page('{%modelName%} Add')
+                        ->type('page')
+                        ->tab($main)
+                        ->action($action)
+                        ->toArray();
     }
 
     public function buildEdit($id, $addonData = [])
     {
-        $pageLayout = [
+        $main =[
             Builder::field('create_time', 'Create Time')->type('datetime'),
             Builder::field('update_time', 'Update Time')->type('datetime'),
-            Builder::actions([
-                Builder::button('Reset')->type('dashed')->action('reset'),
-                Builder::button('Cancel')->type('default')->action('cancel'),
-                Builder::button('Submit')->type('primary')->action('submit')
-                        ->uri('/backend/{%routeName%}/' . $id)
-                        ->method('put'),
-            ]),
+            Builder::field('status', 'Status')->type('tag')->data($addonData['status']),
+        ];
+        $action = [
+            Builder::button('Reset')->type('dashed')->action('reset'),
+            Builder::button('Cancel')->type('default')->action('cancel'),
+            Builder::button('Submit')->type('primary')->action('submit')
+                    ->uri('/backend/{%routeName%}/' . $id)
+                    ->method('put'),
         ];
 
         return Builder::page('{%modelName%} Edit')
-            ->type('page')
-            ->layout($pageLayout)
-            ->toArray();
+                        ->type('page')
+                        ->tab($main)
+                        ->action($action)
+                        ->toArray();
     }
 
-    public function buildList($addonData = [])
+    public function buildList($addonData = [], $params = [])
     {
         $tableToolBar = [
             Builder::button('Add')->type('primary')->action('modal')->uri('/backend/{%routeName%}/add'),
@@ -78,31 +91,33 @@ class {%modelName%} extends Common
             Builder::button('Reload')->type('default')->action('reload'),
         ];
         $batchToolBar = [
-            Builder::button('Delete')->type('danger')->action('batchDelete')
-                    ->uri('/backend/{%routeName%}/batch-delete')
-                    ->method('delete'),
+            Builder::button('Delete')->type('danger')->action('delete')->uri('/backend/{%routeName%}')->method('delete'),
             Builder::button('Disable')->type('default')->action('batchDisable'),
         ];
+        if (isset($params['trash']) && $params['trash'] === 'onlyTrashed') {
+            $batchToolBar = [
+                Builder::button('Delete Permanently')->type('danger')->action('deletePermanently')->uri('/backend/{%routeName%}')->method('delete'),
+                Builder::button('Restore')->type('default')->action('restore')->uri('/backend/{%routeName%}/restore')->method('post'),
+            ];
+        }
         $tableColumn = [
             Builder::field('create_time', 'Create Time')->type('datetime')->sorter(true),
+            Builder::field('status', 'Status')->type('tag')->data($addonData['status']),
+            Builder::field('trash', 'Trash')->type('trash'),
             Builder::actions([
-                Builder::button('Edit')->type('primary')->action('modal')
-                        ->uri('/backend/{%routeName%}'),
-                Builder::button('Full page edit')->type('default')->action('page')
-                        ->uri('/backend/{%routeName%}'),
-                Builder::button('Delete')->type('default')->action('delete')
-                        ->uri('/backend/{%routeName%}')
-                        ->method('delete'),
+                Builder::button('Edit')->type('primary')->action('modal')->uri('/backend/{%routeName%}'),
+                Builder::button('Full page edit')->type('default')->action('page')->uri('/backend/{%routeName%}'),
+                Builder::button('Delete')->type('default')->action('delete')->uri('/backend/{%routeName%}')->method('delete'),
             ])->title('Action'),
         ];
 
         return Builder::page('{%modelName%} List')
-            ->type('basicList')
-            ->searchBar(true)
-            ->tableColumn($tableColumn)
-            ->tableToolBar($tableToolBar)
-            ->batchToolBar($batchToolBar)
-            ->toArray();
+                        ->type('basicList')
+                        ->searchBar(true)
+                        ->tableColumn($tableColumn)
+                        ->tableToolBar($tableToolBar)
+                        ->batchToolBar($batchToolBar)
+                        ->toArray();
     }
     
     // Accessor
