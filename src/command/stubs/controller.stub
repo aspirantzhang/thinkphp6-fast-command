@@ -18,7 +18,7 @@ class {%modelName%} extends Common
 
     public function home()
     {
-        $result = $this->{%instanceName%}->paginatedListAPI($this->request->only($this->{%instanceName%}->allowHome));
+        $result = $this->{%instanceName%}->paginatedListAPI($this->request->only($this->{%instanceName%}->getAllowHome()));
 
         return $this->json(...$result);
     }
@@ -32,7 +32,7 @@ class {%modelName%} extends Common
 
     public function save()
     {
-        $result = $this->{%instanceName%}->saveAPI($this->request->only($this->{%instanceName%}->allowSave));
+        $result = $this->{%instanceName%}->saveAPI($this->request->only($this->{%instanceName%}->getAllowSave()));
 
         return $this->json(...$result);
     }
@@ -46,12 +46,12 @@ class {%modelName%} extends Common
 
     public function update($id)
     {
-        $result = $this->{%instanceName%}->updateAPI($id, $this->request->only($this->{%instanceName%}->allowUpdate));
+        $result = $this->{%instanceName%}->updateAPI($id, $this->request->only($this->{%instanceName%}->getAllowUpdate()));
 
         return $this->json(...$result);
     }
 
-    public function delete($id)
+    public function delete()
     {
         $result = $this->{%instanceName%}->deleteAPI($this->request->param('ids'), $this->request->param('type'));
 
