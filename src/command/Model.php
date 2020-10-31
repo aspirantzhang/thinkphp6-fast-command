@@ -9,6 +9,7 @@ use think\console\Input;
 use think\console\input\Argument;
 use think\console\input\Option;
 use think\console\Output;
+use think\helper\Str;
 
 class Model extends Command
 {
@@ -32,7 +33,7 @@ class Model extends Command
         
         $instanceName = parse_name($modelName, 1, false);
 
-        $tableName = parse_name($modelName);
+        $tableName = Str::snake($modelName);
 
         if ($input->hasOption('route')) {
             $routeName = trim($input->getOption('route'));
