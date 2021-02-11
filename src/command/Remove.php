@@ -37,7 +37,7 @@ class Remove extends Command
         $type = ['controller', 'model', 'logic', 'service', 'route', 'validate'];
 
         foreach ($type as $type) {
-            $filename = $this->appPath . DIRECTORY_SEPARATOR . 'backend' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . $modelName . '.php';
+            $filename = $this->appPath . DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . $modelName . '.php';
 
             if (is_file($filename)) {
                 unlink($filename);

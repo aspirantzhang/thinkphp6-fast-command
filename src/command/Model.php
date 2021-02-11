@@ -53,7 +53,7 @@ class Model extends Command
         $type = ['controller', 'model', 'logic', 'service', 'route', 'validate'];
 
         foreach ($type as $type) {
-            $filename = $this->appPath . DIRECTORY_SEPARATOR . 'backend' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . $modelName . '.php';
+            $filename = $this->appPath . DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . $modelName . '.php';
 
             if (!is_file($filename)) {
                 $content = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . $type . '.stub');

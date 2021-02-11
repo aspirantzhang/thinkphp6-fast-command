@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace app\backend\logic;
+namespace app\api\logic;
 
-use app\backend\model\{%modelName%} as {%modelName%}Model;
+use app\api\model\{%modelName%} as {%modelName%}Model;
 
 class {%modelName%} extends {%modelName%}Model
 {
