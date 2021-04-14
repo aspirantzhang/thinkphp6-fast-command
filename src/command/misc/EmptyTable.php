@@ -24,20 +24,17 @@ class EmptyTable extends Command
 
     protected function execute(Input $input, Output $output)
     {
-        $output->writeln('<info>Earsing all table\'s data...</info>');
+        $output->writeln('<info>Erasing reserved table\'s data...</info>');
 
-        $this->emptyTable();
-
-        $output->writeln('<info>...Done.</info>');
-    }
-
-    protected function emptyTable()
-    {
+        Config::load('api/model', 'model');
         $tables = Config::get('model.reserved_table');
         if (!empty($tables)) {
             foreach ($tables as $table) {
+                $output->writeln('-> ' . $table);
                 Db::execute("TRUNCATE TABLE " . $table);
             }
         }
+
+        $output->writeln('<info>...Done.</info>');
     }
 }
