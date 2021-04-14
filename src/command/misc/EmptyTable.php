@@ -10,6 +10,7 @@ use think\console\input\Argument;
 use think\console\input\Option;
 use think\console\Output;
 use think\helper\Str;
+use think\facade\Config;
 use think\facade\Db;
 
 class EmptyTable extends Command
