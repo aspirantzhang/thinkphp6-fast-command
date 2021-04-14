@@ -34,6 +34,7 @@ class EmptyTable extends Command
                 Db::execute("TRUNCATE TABLE " . $table);
             }
         }
+        Db::execute("DROP TABLE IF EXISTS `unit_test`");
 
         $output->writeln('<info>...Done.</info>');
     }
