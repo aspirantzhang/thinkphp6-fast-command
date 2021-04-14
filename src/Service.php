@@ -13,6 +13,7 @@ class Service extends BaseService
         $this->commands([
             'make:buildModel' => command\Model::class,
             'make:removeModel' => command\Remove::class,
+            'misc:emptyTable' => command\misc\EmptyTable::class
         ]);
     }
 }
