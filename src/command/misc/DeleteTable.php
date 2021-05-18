@@ -13,25 +13,25 @@ use think\helper\Str;
 use think\facade\Config;
 use think\facade\Db;
 
-class EmptyTable extends Command
+class DeleteTable extends Command
 {
 
     protected function configure()
     {
-        $this->setName('misc:emptyTable')
-            ->setDescription('Empty all tables');
+        $this->setName('misc:deleteTable')
+            ->setDescription('Delete tables');
     }
 
     protected function execute(Input $input, Output $output)
     {
-        $output->writeln('<info>Erasing reserved table\'s data...</info>');
+        $output->writeln('<info>Deleting reserved table\'s data...</info>');
 
         Config::load('api/model', 'model');
         $tables = Config::get('model.reserved_table');
         if (!empty($tables)) {
             foreach ($tables as $table) {
                 $output->writeln('-> ' . $table);
-                Db::execute("TRUNCATE TABLE " . $table);
+                Db::execute("DROP TABLE IF EXISTS " . $table);
             }
         }
         Db::execute("DROP TABLE IF EXISTS `unit_test`");
