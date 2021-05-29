@@ -50,7 +50,7 @@ class Model extends Command
     protected function buildModel($modelName, $instanceName, $tableName, $routeName): void
     {
 
-        $type = ['controller', 'model', 'view', 'logic', 'service', 'route', 'validate'];
+        $type = ['controller', 'model', 'view', 'logic', 'service', 'route'];
 
         foreach ($type as $type) {
             $filename = $this->appPath . DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . $modelName . '.php';
