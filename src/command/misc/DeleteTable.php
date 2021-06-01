@@ -26,8 +26,8 @@ class DeleteTable extends Command
     {
         $output->writeln('<info>Deleting reserved table\'s data...</info>');
 
-        Config::load('api/model', 'model');
-        $tables = Config::get('model.reserved_table');
+        Config::load('api/common/reserved', 'reserved');
+        $tables = Config::get('reserved.reserved_table');
         if (!empty($tables)) {
             foreach ($tables as $table) {
                 $output->writeln('-> ' . $table);
