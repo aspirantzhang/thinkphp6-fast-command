@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace app\api\controller;
 
+use think\facade\Config;
 use app\api\service\{%modelName%} as {%modelName%}Service;
 
 class {%modelName%} extends Common
