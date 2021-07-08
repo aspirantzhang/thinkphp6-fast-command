@@ -34,7 +34,7 @@ class Remove extends Command
     {
         $modelName = parse_name($modelName, 1);
 
-        $type = ['controller', 'model', 'view', 'logic', 'service', 'route'];
+        $type = ['controller', 'model', 'view', 'logic', 'service', 'route', 'validate'];
 
         foreach ($type as $type) {
             $filename = $this->appPath . DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . $modelName . '.php';
